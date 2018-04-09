@@ -1,0 +1,84 @@
+题目:开发一个支持多用户同时在线的FTP程序
+要求:
+1.用户加密认证
+2.允许同时多用户登录
+3.每个用户有自己的家目录，且只能访问自己的家目录
+4.对用户进行磁盘配额，每个用户的可用空间不同
+5.允许用户在ftp server上随意切换目录
+6.允许用户查看当前目录下的文件
+7.允许上传和下载文件，并保证文件的一致性md5
+8.文件传输过程中显示进度条
+9.支持文件的断点续传
+-------
+题目:基于线程开发一个FTP服务器:
+要求:
+1.在之前开发的FTP基础上，开发支持多并发的功能
+2.不能使用SocketServer模块，必须自己实现多线程
+3.必须用到队列Queue模块，实现线程池
+4.允许配置最大并发数，比如允许只有10个并发用户
+
+------------------------------------------------------
+结构：
+.
+├── client
+│   ├── download                下载存放路径
+│   │   ├── 1.jpg
+│   │   └── 2.jpg
+│   ├── ftp_client.py           客户端启动文件
+│   └── upload                  上传存放路径
+│       ├── 11.jpg
+│       ├── 1.jpg
+│       ├── 22.jpg
+│       ├── 2.jpg
+│       ├── com.mp4
+│       ├── python.txt
+│       ├── test_argument.py
+│       ├── test.py
+│       └── test.txt
+├── README
+└── server
+    ├── bin
+    │   └── ftp_server.py       服务端启动文件
+    ├── conf
+    │   ├── accounts.ini        用户信息
+    │   └── settings.py         配置文件
+    ├── core
+    │   ├── file_handle.py      文件处理模块
+    │   ├── logger.py           logger模块
+    │   ├── main.py             主程序
+    │   ├── server.py           server模块
+    │   └── user_handle.py      处理accounts.ini文件，增加用户，判断用户
+    ├── home                    用户的home目录
+    │   ├── alice
+    │   │   ├── 1.jpg
+    │   │   ├── 2.jpg
+    │   │   ├── com.mp4
+    │   │   └── test
+    │   │       └── 2.jpg
+    │   ├── alice_a
+    │   │   └── 2.jpg
+    │   └── lily
+    │       ├── 1.jpg
+    │       ├── 2.jpg
+    │       ├── tt
+    │       │   ├── 1.jpg
+    │       │   └── com.mp4
+    │       └── tt1
+    └── log
+        ├── manager.log         manager创建用户的记录
+        └── user.log            用户上传,下载记录
+
+------------------------------------------------------
+使用：
+1.终端启动 python3 ftp_server.py
+2.创建用户,输入 username quota
+3.启动ftp服务器
+4.终端启动 python3 ftp_client.py -s 127.0.0.1 -p 8083 / 查看帮助: python3 ftp_client.py -h
+5.输入用户名，密码； alice 123  lily 123  alice_a 123  有三次机会
+6.与server交互：
+    6.1. get a.txt          下载文件
+    6.2. put a.txt          上传文件
+    6.3. ls                 查询当前目录下的文件列表
+    6.4. mkdir test         创建文件夹
+    6.5. cd test            切换目录
+    6.6. rm a.txt/test      删除文件或空文件夹
